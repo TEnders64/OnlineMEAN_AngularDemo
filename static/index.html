@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+  <meta charset="UTF-8">
+  <title>Angular!!!</title>
+  <script src="angular.js"></script>
+  <script src="angular-route.js"></script>
+  <script>
+    var myApp = angular.module('myApp', ['ngRoute']);
+
+    myApp.config(function($routeProvider){
+      $routeProvider
+       .when('/',{
+         templateUrl: 'partials/namespartial.html'
+       })
+       .when('/agesPartial', {
+         templateUrl: 'partials/agespartial.html'
+       })
+       .when('/namesPartial', {
+         templateUrl: 'partials/namespartial.html'
+       })
+       .when('/show/:name', {
+         templateUrl: 'partials/show.html'
+       })
+       .otherwise({
+         redirectTo: '/'
+       })
+    });
+    myApp.factory('namesFactory', function(){
+      var factory = {};
+      factory.names = [];
+      factory.getNames = function(callback){
+        callback(factory.names);
+      }
+      factory.addName = function(name, callback){
+        factory.names.push(name);
+        callback(factory.names);
+      }
+      factory.destroy = function(name, callback){
+        factory.names.splice(factory.names.indexOf(name), 1);
+        callback(factory.names);
+      }
+      return factory;
+    })
+
+    myApp.controller('namesController', function(namesFactory, $location){
+      var self = this;
+      namesFactory.getNames(function(namesFromFactory){
+        self.names = namesFromFactory;
+      });
+
+      this.addName = function(){
+        namesFactory.addName(this.personsName, function(namesFromFactory){
+          self.names = namesFromFactory;
+        });
+        this.personsName = "";
+      }
+
+      this.destroy = function(name){
+        namesFactory.destroy(name, function(namesFromFactory){
+          self.names = namesFromFactory;
+          $location.url('/agesPartial')
+        });
+      }
+      // console.log(this);
+    })
+
+    myApp.controller('agesController', function(namesFactory){
+      this.ages = [32,40,50];
+      this.names = namesFactory.names;
+    })
+
+    myApp.controller('showController', function(namesFactory, $routeParams){
+      if ($routeParams){
+        console.log($routeParams);
+      }
+    })
+  </script>
+</head>
+<body>
+  <a href="#/namesPartial">Displays All Names</a> | <a href="#/agesPartial">Display Ages</a>
+  <div ng-view="">
+
+  </div>
+</body>
+</html>

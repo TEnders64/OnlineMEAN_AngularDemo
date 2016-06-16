@@ -1,0 +1,8 @@
+<div ng-controller="namesController as namesCtrl">
+  <h1>NAMES!!!</h1>
+  <ul>
+    <li ng-repeat="name in namesCtrl.names | filter: searchName | orderBy: name"><a href="#/show/{{name}}">{{name}}</a> <button ng-click="namesCtrl.destroy(name)">Delete</button></li>
+  </ul>
+  Search: <input type="text" ng-model="searchName">
+  <input type="text" ng-model="namesCtrl.personsName"><button ng-click="namesCtrl.addName()">Submit</button>
+</div>

@@ -1,0 +1,10 @@
+<div ng-controller="agesController as agesCtrl">
+  <h1>AGES!</h1>
+  <ul>
+    <li ng-repeat="age in agesCtrl.ages" ng-bind="age"></li>
+  </ul>
+  <h1>The names from namesFactory</h1>
+  <ul>
+    <li ng-repeat="name in agesCtrl.names" ng-bind="name"></li>
+  </ul>
+</div>
